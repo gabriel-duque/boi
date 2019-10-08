@@ -6,7 +6,8 @@ CPPFLAGS = -Iinclude
 CFLAGS = -Wall -Wextra -Werror -std=c11 -pedantic
 
 SRC = \
-	  src/main.c
+	  src/main.c \
+	  src/cpu.c
 
 OBJ = $(SRC:.c=.o)
 
