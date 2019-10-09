@@ -12,6 +12,7 @@ void cpu_init(struct gb_s *gb)
     gb->cpu.regs.bc = 0x13;
     gb->cpu.regs.de = 0xd8;
     gb->cpu.regs.hl = 0x14d;
+
     gb->cpu.regs.sp = 0xfffe;
     gb->cpu.regs.pc = 0x100;
 
