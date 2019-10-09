@@ -2,10 +2,12 @@
 #include <stdlib.h>
 
 #include "cpu.h"
+#include "gb.h"
 
 int main(int argc, char **argv) {
     char *filename;
-    struct cpu_s cpu;
+
+    struct gb_s gb;
 
     /* Handle no file given or to many files given */
     if (argc != 2) {
@@ -29,5 +31,5 @@ int main(int argc, char **argv) {
     //}
     printf("ROM succesfully loaded...\n");
 
-    cpu_init(&cpu);
+    cpu_init(&gb);
 }
