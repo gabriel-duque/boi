@@ -35,7 +35,7 @@ void cpu_init(struct gb_s *gb)
      */
     gb->cpu.cycles = 0;
 
-    printf("CPU succesfully initialized ...\n");
+    printf("CPU succesfully initialized...\n");
 
     return;
 }
