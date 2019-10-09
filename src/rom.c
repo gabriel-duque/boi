@@ -211,6 +211,8 @@ static void rom_init(struct gb_s *gb)
     } else {
         printf("A valid header checksum was found: 0x%02x...\n", rom_checksum);
     }
+
+    return;
 }
 
 /* Map GameBoy header and call parsing function */
@@ -236,4 +238,7 @@ void rom_load(struct gb_s *gb, const char *const filename)
     }
 
     rom_init(gb);
+    printf("ROM succesfully loaded...\n");
+
+    return;
 }

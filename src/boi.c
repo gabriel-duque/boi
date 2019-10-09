@@ -5,6 +5,7 @@
 #include "gb.h"
 #include "rom.h"
 
+/* Main entry point for the Boi emulator */
 int main(int argc, char **argv)
 {
     char *filename;
@@ -28,7 +29,5 @@ int main(int argc, char **argv)
     printf("Attempting to load ROM: %s...\n", filename);
 
     rom_load(&gb, filename);
-    printf("ROM succesfully loaded...\n");
-
     cpu_init(&gb);
 }
