@@ -8,29 +8,31 @@ CPPFLAGS = -Iinclude
 CFLAGS = -Wall -Wextra -Werror -std=c11 -pedantic
 
 SRC = \
-	  src/boi.c \
+	  src/$(BIN).c \
 	  src/cpu.c \
 	  src/mem.c \
 	  src/rom.c
 
 OBJ = $(SRC:.c=.o)
 
+BIN = boi
+
 all: release
 
-boi: $(OBJ)
-boi:
+$(BIN): $(OBJ)
+$(BIN):
 	$(CC) $^ -o $@
 
 release: CFLAGS += -O2
-release: boi
+release: $(BIN)
 
 debug: CPPFLAGS += -D_BOI_DEBUG
 debug: CFLAGS += -O0 -g3
-debug: boi
+debug: $(BIN)
 
 clean:
 	$(RM) $(OBJ)
-	$(RM) boi
+	$(RM) $(BIN)
 
 .PHONY: all clean release debug
 
