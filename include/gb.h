@@ -6,6 +6,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/******************************************************************************
+ * CPU related types
+ */
+
 /* CPU registers */
 struct regs_s {
     union {
@@ -95,9 +99,43 @@ struct cpu_s {
     uint8_t cycles;
 };
 
-/* The while GameBoy struture */
+/*
+ *****************************************************************************/
+
+/******************************************************************************
+ * ROM related types
+ */
+
+/* Cartridge types */
+enum cartridge_type_e {
+    ROM,
+    MBC1,
+    MBC2,
+    MMM01,
+    MBC3,
+    MBC5
+};
+
+/* Structure to get cartridge info when parsing GameBoy header */
+struct cartridge_s {
+    uint8_t id;
+    enum cartridge_type_e type;
+    char *name;
+};
+
+/* Actual ROM structure */
+struct rom_s {
+    uint8_t *raw;
+    enum cartridge_type_e type;
+};
+
+/*
+ *****************************************************************************/
+
+/* The final GameBoy structure */
 struct gb_s {
     struct cpu_s cpu;
+    struct rom_s rom;
 };
 
 #endif /* !BOI_GB_H */

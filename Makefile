@@ -1,13 +1,16 @@
 # Begin Makefile
 
+# This is the Makefile for the Boi GameBoy emulator.
+
 CC = clang
 
 CPPFLAGS = -Iinclude
 CFLAGS = -Wall -Wextra -Werror -std=c11 -pedantic
 
 SRC = \
-	  src/main.c \
-	  src/cpu.c
+	  src/boi.c \
+	  src/cpu.c \
+	  src/rom.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -17,7 +20,7 @@ boi: $(OBJ)
 boi:
 	$(CC) $^ -o $@
 
-release: CFLAGS += -Os
+release: CFLAGS += -O2
 release: boi
 
 debug: CPPFLAGS += -D_BOI_DEBUG

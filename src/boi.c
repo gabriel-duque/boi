@@ -3,8 +3,10 @@
 
 #include "cpu.h"
 #include "gb.h"
+#include "rom.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     char *filename;
 
     struct gb_s gb;
@@ -25,10 +27,7 @@ int main(int argc, char **argv) {
 
     printf("Attempting to load ROM: %s...\n", filename);
 
-    //if (load_rom(filename)) {
-    //    fprintf(stderr, "An error occured while load the ROM...\n");
-    //    exit(EXIT_FAILURE);
-    //}
+    rom_load(&gb, filename);
     printf("ROM succesfully loaded...\n");
 
     cpu_init(&gb);
