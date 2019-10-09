@@ -55,7 +55,7 @@ void mem_init(struct gb_s *gb)
     gb->mem[0xff4b] = 0x0;
     gb->mem[0xffff] = 0x0;
 
-    printf("Memory succesfully initialized...\n");
+    printf("Memory successfully initialized...\n");
 
     return;
 }

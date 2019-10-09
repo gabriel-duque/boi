@@ -239,8 +239,10 @@ void rom_load(struct gb_s *gb, const char *const filename)
     }
     close(fd);
 
+    /* Call the header parser */
     rom_init(gb);
-    printf("ROM succesfully loaded...\n");
+
+    printf("ROM successfully loaded...\n");
 
     return;
 }
