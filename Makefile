@@ -10,6 +10,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c11 -pedantic
 SRC = \
 	  src/boi.c \
 	  src/cpu.c \
+	  src/mem.c \
 	  src/rom.c
 
 OBJ = $(SRC:.c=.o)

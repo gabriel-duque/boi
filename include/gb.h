@@ -136,6 +136,7 @@ struct rom_s {
 struct gb_s {
     struct cpu_s cpu;
     struct rom_s rom;
+    uint8_t *mem;
 };
 
 #endif /* !BOI_GB_H */
