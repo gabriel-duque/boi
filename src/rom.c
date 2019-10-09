@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "gb.h"
 
@@ -236,6 +237,7 @@ void rom_load(struct gb_s *gb, const char *const filename)
         fprintf(stderr, "Error while mapping ROM: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
+    close(fd);
 
     rom_init(gb);
     printf("ROM succesfully loaded...\n");
