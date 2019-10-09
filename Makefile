@@ -8,7 +8,7 @@ CPPFLAGS = -Iinclude
 CFLAGS = -Wall -Wextra -Werror -std=c11 -pedantic
 
 SRC = \
-	  src/$(BIN).c \
+	  src/boi.c \
 	  src/cpu.c \
 	  src/mem.c \
 	  src/rom.c
