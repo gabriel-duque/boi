@@ -8,24 +8,35 @@
 #define OPCODE_COUNT    256
 #define CB_PREFIX_COUNT 256
 
-static inline bool func_not_implemented(struct gb_s *gb, uint8_t op)
+/* Not implemented yet */
+static inline bool func_not_implemented(struct gb_s *gb, struct op_s op)
 {
-    UNUSED(gb);
-    UNUSED(op);
+    gb->cpu.regs.pc += op.size;
     return true;
 }
 
-static inline bool func_invalid(struct gb_s *gb, uint8_t op)
+/* Invalid opcode */
+static inline bool func_invalid(struct gb_s *gb, struct op_s op)
 {
     UNUSED(gb);
-    fprintf(stderr, "Error: invalid opcode:  0x%02x\n", op);
+    fprintf(stderr, "Error: invalid opcode:  0x%02x\n", op.op);
     return false;
 }
 
-static inline bool func_nop(struct gb_s *gb, uint8_t op)
+/* 0x00: nop */
+static inline bool func_nop(struct gb_s *gb, struct op_s op)
 {
-    UNUSED(gb);
-    UNUSED(op);
+    gb->cpu.regs.pc += op.size;
+    gb->cpu.cycles += op.cycles;
+    return true;
+}
+
+/* 0xc3: jp u16 */
+static inline bool func_c3(struct gb_s *gb, struct op_s op)
+{
+    /* TODO: check we are not out of bounds */
+    gb->cpu.regs.pc = mem_get_word(gb, gb->cpu.regs.pc + 1);
+    gb->cpu.cycles += op.cycles;
     return true;
 }
 
@@ -1398,7 +1409,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
     {
         .op = 0xc3,
         .name = "jp u16",
-        .func = func_not_implemented,
+        .func = func_c3,
         .size = 3,
         .cycles = 4
     },
