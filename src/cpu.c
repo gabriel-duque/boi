@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "gb.h"
+#include "mem.h"
 #include "ops.h"
 
 /* Initialize CPU to default values */
@@ -45,7 +46,18 @@ bool cpu_cycle(struct gb_s *gb)
 {
     struct op_s opcode;
     bool ret;
-    uint8_t op = gb->mem[gb->cpu.regs.pc];
+    uint8_t op;
+
+    /* Just increment CPU cycles if CPU is halted */
+    if (gb->cpu.halted) {
+        ++gb->cpu.cycles;
+        return true;
+    }
+
+    /* TODO: implement interrupt flushing */
+
+    /* Fetch opcode */
+    op = mem_get_byte(gb, gb->cpu.regs.pc);
 
     for (uint16_t i = 0; i < OPCODE_COUNT; ++i) {
         if (opcodes[i].op == op) {
@@ -58,7 +70,7 @@ bool cpu_cycle(struct gb_s *gb)
     printf("0x%04x: 0x%02x: %s\n", gb->cpu.regs.pc, opcode.op, opcode.name);
 #endif /* !_BOI_DEBUG */
 
-    ret = opcode.func(gb);
+    ret = opcode.func(gb, opcode.op);
     gb->cpu.regs.pc += opcode.size;
 
     return ret;
