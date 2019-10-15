@@ -70,8 +70,7 @@ bool cpu_cycle(struct gb_s *gb)
     printf("0x%04x: 0x%02x: %s\n", gb->cpu.regs.pc, opcode.op, opcode.name);
 #endif /* !_BOI_DEBUG */
 
-    ret = opcode.func(gb, opcode.op);
-    gb->cpu.regs.pc += opcode.size;
+    ret = opcode.func(gb, opcode);
 
     return ret;
 }

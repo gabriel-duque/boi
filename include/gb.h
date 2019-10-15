@@ -152,7 +152,7 @@ struct gb_s {
 struct op_s {
     uint8_t op;
     char *name;
-    bool (*func) (struct gb_s*, uint8_t);
+    bool (*func) (struct gb_s*, struct op_s);
     uint8_t size;
     uint8_t cycles;
 };

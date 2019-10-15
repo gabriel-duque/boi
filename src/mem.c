@@ -68,5 +68,5 @@ uint8_t  mem_get_byte(struct gb_s *gb, uint16_t off)
 uint16_t mem_get_word(struct gb_s *gb, uint16_t off)
 {
     /* TODO: check off is not equal to 0xffff (the last byte) */
-    return (((uint16_t) gb->mem[off]) << 8) | gb->mem[off + 1];
+    return (((uint16_t) gb->mem[off + 1]) << 8) | gb->mem[off];
 }
