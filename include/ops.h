@@ -18,7 +18,7 @@ static inline bool func_not_implemented(struct gb_s *gb, uint8_t op)
 static inline bool func_invalid(struct gb_s *gb, uint8_t op)
 {
     UNUSED(gb);
-    fprintf(stderr, "%s 0x%02x\n", "Error: invalid opcode:", op);
+    fprintf(stderr, "Error: invalid opcode:  0x%02x\n", op);
     return false;
 }
 
@@ -32,1539 +32,1795 @@ static inline bool func_nop(struct gb_s *gb, uint8_t op)
 static const struct op_s opcodes[OPCODE_COUNT] = {
     {
         .op = 0x00,
-        .name = "NOP",
+        .name = "nop",
         .func = func_nop,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x01,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld BC,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0x02,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (BC),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x03,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc BC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x04,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x05,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x06,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x07,
-        .name = "NOT IMPLEMENTED",
+        .name = "rlca",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x08,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (u16),SP",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 5
     },
     {
         .op = 0x09,
-        .name = "NOT IMPLEMENTED",
+        .name = "add HL,BC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x0a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(BC)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x0b,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec BC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x0c,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x0d,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x0e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x0f,
-        .name = "NOT IMPLEMENTED",
+        .name = "rrca",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x10,
-        .name = "NOT IMPLEMENTED",
+        .name = "stop",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 1
     },
     {
         .op = 0x11,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld DE,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0x12,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (DE),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x13,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc DE",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x14,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x15,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x16,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x17,
-        .name = "NOT IMPLEMENTED",
+        .name = "rla",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x18,
-        .name = "NOT IMPLEMENTED",
+        .name = "jr i8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 3
     },
     {
         .op = 0x19,
-        .name = "NOT IMPLEMENTED",
+        .name = "add HL,DE",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x1a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(DE)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x1b,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec DE",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x1c,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x1d,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x1e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x1f,
-        .name = "NOT IMPLEMENTED",
+        .name = "rra",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x20,
-        .name = "NOT IMPLEMENTED",
+        .name = "jr NZ,i8",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0x21,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld HL,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0x22,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL+),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x23,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x24,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x25,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x26,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x27,
-        .name = "NOT IMPLEMENTED",
+        .name = "daa",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x28,
-        .name = "NOT IMPLEMENTED",
+        .name = "jr Z,i8",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0x29,
-        .name = "NOT IMPLEMENTED",
+        .name = "add HL,HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x2a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(HL+)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x2b,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x2c,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x2d,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x2e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x2f,
-        .name = "NOT IMPLEMENTED",
+        .name = "cpl",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x30,
-        .name = "NOT IMPLEMENTED",
+        .name = "jr NC,i8",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0x31,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld SP,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0x32,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL-),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x33,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc SP",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x34,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc (HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0x35,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec (HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0x36,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 3
     },
     {
         .op = 0x37,
-        .name = "NOT IMPLEMENTED",
+        .name = "scf",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x38,
-        .name = "NOT IMPLEMENTED",
+        .name = "jr C,i8",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0x39,
-        .name = "NOT IMPLEMENTED",
+        .name = "add HL,SP",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x3a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(HL-)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x3b,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec SP",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x3c,
-        .name = "NOT IMPLEMENTED",
+        .name = "inc A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x3d,
-        .name = "NOT IMPLEMENTED",
+        .name = "dec A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x3e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0x3f,
-        .name = "NOT IMPLEMENTED",
+        .name = "ccf",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x40,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x41,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x42,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x43,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x44,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x45,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x46,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x47,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld B,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x48,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x49,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x4a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x4b,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x4c,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x4d,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x4e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x4f,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld C,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x50,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x51,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x52,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x53,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x54,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x55,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x56,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x57,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld D,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x58,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x59,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x5a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x5b,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x5c,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x5d,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x5e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x5f,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld E,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x60,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x61,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x62,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x63,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x64,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x65,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x66,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x67,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld H,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x68,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x69,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x6a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x6b,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x6c,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x6d,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x6e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x6f,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld L,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x70,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x71,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x72,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x73,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x74,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x75,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x76,
-        .name = "NOT IMPLEMENTED",
+        .name = "halt",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x77,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (HL),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x78,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x79,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x7a,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x7b,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x7c,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x7d,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x7e,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x7f,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x80,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x81,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x82,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x83,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x84,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x85,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x86,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x87,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x88,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x89,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x8a,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x8b,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x8c,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x8d,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x8e,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x8f,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x90,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x91,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x92,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x93,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x94,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x95,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x96,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x97,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x98,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x99,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x9a,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x9b,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x9c,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x9d,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0x9e,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0x9f,
-        .name = "NOT IMPLEMENTED",
+        .name = "sbc A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa0,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa1,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa2,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa3,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa4,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa5,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa6,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xa7,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa8,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xa9,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xaa,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xab,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xac,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xad,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xae,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xaf,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb0,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb1,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb2,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb3,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb4,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb5,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb6,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xb7,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb8,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,B",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xb9,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xba,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,D",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xbb,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,E",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xbc,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,H",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xbd,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,L",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xbe,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,(HL)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xbf,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xc0,
-        .name = "NOT IMPLEMENTED",
+        .name = "ret NZ",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0xc1,
-        .name = "NOT IMPLEMENTED",
+        .name = "pop BC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0xc2,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp NZ,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 3
     },
     {
         .op = 0xc3,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 4
     },
     {
         .op = 0xc4,
-        .name = "NOT IMPLEMENTED",
+        .name = "call NZ,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 3
     },
     {
         .op = 0xc5,
-        .name = "NOT IMPLEMENTED",
+        .name = "push BC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xc6,
-        .name = "NOT IMPLEMENTED",
+        .name = "add A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xc7,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 00h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xc8,
-        .name = "NOT IMPLEMENTED",
+        .name = "ret Z",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 2
     },
     {
         .op = 0xc9,
-        .name = "NOT IMPLEMENTED",
+        .name = "ret",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xca,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp Z,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size =,
+        .cycles = 3
     },
     {
         .op = 0xcb,
-        .name = "NOT IMPLEMENTED",
+        .name = "prefix CB",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xcc,
-        .name = "NOT IMPLEMENTED",
+        .name = "call Z,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0xcd,
-        .name = "NOT IMPLEMENTED",
+        .name = "call u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 6
     },
     {
         .op = 0xce,
-        .name = "NOT IMPLEMENTED",
+        .name = "adc A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xcf,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 08h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xd0,
-        .name = "NOT IMPLEMENTED",
+        .name = "ret NC",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xd1,
-        .name = "NOT IMPLEMENTED",
+        .name = "pop DE",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0xd2,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp NC,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0xd3,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xd4,
-        .name = "NOT IMPLEMENTED",
+        .name = "call NC,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0xd5,
-        .name = "NOT IMPLEMENTED",
+        .name = "push DE",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xd6,
-        .name = "NOT IMPLEMENTED",
+        .name = "sub A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xd7,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 10h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xd8,
-        .name = "NOT IMPLEMENTED",
+        .name = "ret C",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xd9,
-        .name = "NOT IMPLEMENTED",
+        .name = "reti",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xda,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp C,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0xdb,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xdc,
-        .name = "NOT IMPLEMENTED",
+        .name = "call C,u16",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 3
     },
     {
         .op = 0xdd,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xde,
-        .name = "INVALID",
-        .func = func_invalid,
-        .size = 0
+        .name = "sbc A,u8",
+        .func = func_not_implemented,
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xdf,
-        .name = "INVALID",
-        .func = func_invalid,
-        .size = 0
+        .name = "rst 18h",
+        .func = func_not_implemented,
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xe0,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (FF00+u8),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 3
     },
     {
         .op = 0xe1,
-        .name = "NOT IMPLEMENTED",
+        .name = "pop HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0xe2,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (FF00+C),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xe3,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xe4,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xe5,
-        .name = "NOT IMPLEMENTED",
+        .name = "push HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xe6,
-        .name = "NOT IMPLEMENTED",
+        .name = "and A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xe7,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 20h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xe8,
-        .name = "NOT IMPLEMENTED",
+        .name = "add SP,i8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 4
     },
     {
         .op = 0xe9,
-        .name = "NOT IMPLEMENTED",
+        .name = "jp HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xea,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld (u16),A",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 4
     },
     {
         .op = 0xeb,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xec,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xed,
-        .name = "NOT IMPLEMENTED",
-        .func = func_not_implemented,
-        .size = 1
+        .name = "invalid",
+        .func = func_invalid,
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xee,
-        .name = "NOT IMPLEMENTED",
+        .name = "xor A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xef,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 28h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xf0,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(FF00+u8)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 3
     },
     {
         .op = 0xf1,
-        .name = "NOT IMPLEMENTED",
+        .name = "pop AF",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 3
     },
     {
         .op = 0xf2,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(FF00+C)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xf3,
-        .name = "NOT IMPLEMENTED",
+        .name = "di",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xf4,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xf5,
-        .name = "NOT IMPLEMENTED",
+        .name = "push AF",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xf6,
-        .name = "NOT IMPLEMENTED",
+        .name = "or A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xf7,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 30h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     },
     {
         .op = 0xf8,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld HL,SP+i8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 3
     },
     {
         .op = 0xf9,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld SP,HL",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 2
     },
     {
         .op = 0xfa,
-        .name = "NOT IMPLEMENTED",
+        .name = "ld A,(u16)",
         .func = func_not_implemented,
-        .size = 1
+        .size = 3,
+        .cycles = 4
     },
     {
         .op = 0xfb,
-        .name = "NOT IMPLEMENTED",
+        .name = "ei",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 1
     },
     {
         .op = 0xfc,
-        .name = "INVALID",
+        .name = "invalid",
         .func = func_invalid,
-        .size = 0
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xfd,
-        .name = "NOT IMPLEMENTED",
-        .func = func_not_implemented,
-        .size = 1
+        .name = "invalid",
+        .func = func_invalid,
+        .size = 1,
+        .cycles = 0
     },
     {
         .op = 0xfe,
-        .name = "NOT IMPLEMENTED",
+        .name = "cp A,u8",
         .func = func_not_implemented,
-        .size = 1
+        .size = 2,
+        .cycles = 2
     },
     {
         .op = 0xff,
-        .name = "NOT IMPLEMENTED",
+        .name = "rst 38h",
         .func = func_not_implemented,
-        .size = 1
+        .size = 1,
+        .cycles = 4
     }
 };
 
