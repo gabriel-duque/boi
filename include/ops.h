@@ -258,7 +258,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0x20,
         .name = "jr NZ,i8",
         .func = func_not_implemented,
-        .size =,
+        .size = 2,
         .cycles = 2
     },
     {
@@ -314,7 +314,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0x28,
         .name = "jr Z,i8",
         .func = func_not_implemented,
-        .size =,
+        .size = 2,
         .cycles = 2
     },
     {
@@ -370,7 +370,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0x30,
         .name = "jr NC,i8",
         .func = func_not_implemented,
-        .size =,
+        .size = 2,
         .cycles = 2
     },
     {
@@ -426,7 +426,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0x38,
         .name = "jr C,i8",
         .func = func_not_implemented,
-        .size =,
+        .size = 2,
         .cycles = 2
     },
     {
@@ -1378,7 +1378,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0xc0,
         .name = "ret NZ",
         .func = func_not_implemented,
-        .size =,
+        .size = 1,
         .cycles = 2
     },
     {
@@ -1392,7 +1392,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0xc2,
         .name = "jp NZ,u16",
         .func = func_not_implemented,
-        .size =,
+        .size = 3,
         .cycles = 3
     },
     {
@@ -1406,7 +1406,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0xc4,
         .name = "call NZ,u16",
         .func = func_not_implemented,
-        .size =,
+        .size = 3,
         .cycles = 3
     },
     {
@@ -1434,7 +1434,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0xc8,
         .name = "ret Z",
         .func = func_not_implemented,
-        .size =,
+        .size = 1,
         .cycles = 2
     },
     {
@@ -1448,7 +1448,7 @@ static const struct op_s opcodes[OPCODE_COUNT] = {
         .op = 0xca,
         .name = "jp Z,u16",
         .func = func_not_implemented,
-        .size =,
+        .size = 3,
         .cycles = 3
     },
     {
