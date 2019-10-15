@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "clk.h"
 #include "cpu.h"
 #include "gb.h"
+#include "gpu.h"
 #include "mem.h"
 #include "rom.h"
-#include "run.h"
 
 /* Main entry point for the Boi emulator */
 int main(int argc, char **argv)
@@ -36,8 +37,8 @@ int main(int argc, char **argv)
     cpu_init(&gb);
 
     /* Loop and execute instructions */
-    while (run(&gb))
-        ;
+    while (cpu_cycle(&gb) && gpu_cycle(&gb))
+        clk_tick(&gb);
 
     /* TODO: cleanup */
 }
