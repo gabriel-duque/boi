@@ -8,22 +8,24 @@
 #define OPCODE_COUNT    256
 #define CB_PREFIX_COUNT 256
 
-static inline bool func_not_implemented(struct gb_s *gb)
+static inline bool func_not_implemented(struct gb_s *gb, uint8_t op)
 {
     UNUSED(gb);
+    UNUSED(op);
     return true;
 }
 
-static inline bool func_invalid(struct gb_s *gb)
+static inline bool func_invalid(struct gb_s *gb, uint8_t op)
 {
     UNUSED(gb);
-    fprintf(stderr, "%s\n", "Error: invalid opcode");
+    fprintf(stderr, "%s 0x%02x\n", "Error: invalid opcode:", op);
     return false;
 }
 
-static inline bool func_nop(struct gb_s *gb)
+static inline bool func_nop(struct gb_s *gb, uint8_t op)
 {
     UNUSED(gb);
+    UNUSED(op);
     return true;
 }
 
