@@ -154,6 +154,7 @@ struct op_s {
     char *name;
     bool (*func) (struct gb_s*, uint8_t);
     uint8_t size;
+    uint8_t cycles;
 };
 
 /*****************************************************************************/
