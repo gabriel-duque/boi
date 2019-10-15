@@ -182,8 +182,8 @@ static void rom_init(struct gb_s *gb)
             break;
         }
     }
-    if (index == CARTRIDGE_TYPE_COUNT){
-        fprintf(stderr, "Invalid or unsupported cartridge type: %x", rom_type);
+    if (index == CARTRIDGE_TYPE_COUNT) {
+        fprintf(stderr, "Unsupported cartridge type: 0x%x", rom_type);
         exit(EXIT_FAILURE);
     }
     printf("Cartridge type 0x%x: %s\n", rom_cartridge.id, rom_cartridge.name);
