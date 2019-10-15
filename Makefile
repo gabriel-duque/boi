@@ -11,7 +11,8 @@ SRC = \
 	  src/boi.c \
 	  src/cpu.c \
 	  src/mem.c \
-	  src/rom.c
+	  src/rom.c \
+	  src/run.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -31,8 +32,7 @@ debug: CFLAGS += -O0 -g3
 debug: $(BIN)
 
 clean:
-	$(RM) $(OBJ)
-	$(RM) $(BIN)
+	$(RM) $(OBJ) $(BIN)
 
 .PHONY: all clean release debug
 

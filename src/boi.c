@@ -5,11 +5,12 @@
 #include "gb.h"
 #include "mem.h"
 #include "rom.h"
+#include "run.h"
 
 /* Main entry point for the Boi emulator */
 int main(int argc, char **argv)
 {
-    char *filename;
+    const char *filename;
 
     struct gb_s gb;
 
@@ -29,7 +30,14 @@ int main(int argc, char **argv)
 
     printf("Attempting to load ROM: %s...\n", filename);
 
+    /* Initialize the GameBoy system */
     rom_load(&gb, filename);
     mem_init(&gb);
     cpu_init(&gb);
+
+    /* Loop and execute instructions */
+    while (run(&gb))
+        ;
+
+    /* TODO: cleanup */
 }
