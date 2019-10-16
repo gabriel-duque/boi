@@ -18,11 +18,11 @@ CPU:
 
     [x] implement all structs
 
-    [ ] main CPU cycle loop
+    [x] main CPU cycle loop
 
     [ ] interrupt handler
 
-    [ ] implement opcodes
+    [-] implement opcodes
 
     [ ] handle clock
 
@@ -60,6 +60,6 @@ Misc:
 
     [ ] implement a CPU state dump
 
-    [ ] game Loop
+    [x] game Loop
 
     [ ] grep for TODO everywhere
