@@ -25,7 +25,7 @@ $(BIN): $(OBJ)
 $(BIN):
 	$(CC) $(LDFLAGS) $^ -o $@
 
-release: CFLAGS += -O2
+release: CFLAGS += -O2 -fvisibility=hidden -fvisibility-inlines-hidden
 release: LDFLAGS += -s
 release: $(BIN)
 
