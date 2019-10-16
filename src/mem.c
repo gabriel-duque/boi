@@ -70,3 +70,17 @@ uint16_t mem_get_word(struct gb_s *gb, uint16_t off)
     /* TODO: check off is not equal to 0xffff (the last byte) */
     return (((uint16_t) gb->mem[off + 1]) << 8) | gb->mem[off];
 }
+
+void mem_write_byte(struct gb_s *gb, uint16_t off, uint8_t val)
+{
+    /* TODO: handle MBC and filtering for ro memory parts */
+    gb->mem[off] = val;
+}
+
+void mem_write_word(struct gb_s *gb, uint16_t off, uint16_t val)
+{
+    /* TODO: handle MBC and filtering for ro memory parts */
+    /* Avoid casting gb->mem + off to a (uint16_t *) */
+    gb->mem[off] = val & 0xff;
+    gb->mem[off] = val >> 8;
+}
