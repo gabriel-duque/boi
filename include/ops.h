@@ -1,1838 +1,277 @@
 #ifndef BOI_OPS_H
 #define BOI_OPS_H
 
+#ifdef _BOI_DEBUG
+
+#include <stdint.h>
 #include <stdio.h>
 
-#include "gb.h"
-
 #define OPCODE_COUNT    256
-#define CB_PREFIX_COUNT 256
 
-/* Not implemented yet */
-static inline bool func_not_implemented(struct gb_s *gb, struct op_s op)
-{
-    gb->cpu.regs.pc += op.size;
-    return true;
-}
-
-/* Invalid opcode */
-static inline bool func_invalid(struct gb_s *gb, struct op_s op)
-{
-    UNUSED(gb);
-    fprintf(stderr, "Error: invalid opcode:  0x%02x\n", op.op);
-    return false;
-}
-
-/* 0x00: nop */
-static inline bool func_nop(struct gb_s *gb, struct op_s op)
-{
-    gb->cpu.regs.pc += op.size;
-    gb->cpu.cycles += op.cycles;
-    return true;
-}
-
-/* 0xc3: jp u16 */
-static inline bool func_c3(struct gb_s *gb, struct op_s op)
-{
-    /* TODO: check we are not out of bounds */
-    gb->cpu.regs.pc = mem_get_word(gb, gb->cpu.regs.pc + 1);
-    gb->cpu.cycles += op.cycles;
-    return true;
-}
-
-static const struct op_s opcodes[OPCODE_COUNT] = {
-    {
-        .op = 0x00,
-        .name = "nop",
-        .func = func_nop,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x01,
-        .name = "ld BC,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0x02,
-        .name = "ld (BC),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x03,
-        .name = "inc BC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x04,
-        .name = "inc B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x05,
-        .name = "dec B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x06,
-        .name = "ld B,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x07,
-        .name = "rlca",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x08,
-        .name = "ld (u16),SP",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 5
-    },
-    {
-        .op = 0x09,
-        .name = "add HL,BC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x0a,
-        .name = "ld A,(BC)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x0b,
-        .name = "dec BC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x0c,
-        .name = "inc C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x0d,
-        .name = "dec C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x0e,
-        .name = "ld C,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x0f,
-        .name = "rrca",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x10,
-        .name = "stop",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 1
-    },
-    {
-        .op = 0x11,
-        .name = "ld DE,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0x12,
-        .name = "ld (DE),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x13,
-        .name = "inc DE",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x14,
-        .name = "inc D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x15,
-        .name = "dec D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x16,
-        .name = "ld D,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x17,
-        .name = "rla",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x18,
-        .name = "jr i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 3
-    },
-    {
-        .op = 0x19,
-        .name = "add HL,DE",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x1a,
-        .name = "ld A,(DE)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x1b,
-        .name = "dec DE",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x1c,
-        .name = "inc E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x1d,
-        .name = "dec E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x1e,
-        .name = "ld E,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x1f,
-        .name = "rra",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x20,
-        .name = "jr NZ,i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x21,
-        .name = "ld HL,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0x22,
-        .name = "ld (HL+),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x23,
-        .name = "inc HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x24,
-        .name = "inc H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x25,
-        .name = "dec H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x26,
-        .name = "ld H,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x27,
-        .name = "daa",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x28,
-        .name = "jr Z,i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x29,
-        .name = "add HL,HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x2a,
-        .name = "ld A,(HL+)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x2b,
-        .name = "dec HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x2c,
-        .name = "inc L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x2d,
-        .name = "dec L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x2e,
-        .name = "ld L,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x2f,
-        .name = "cpl",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x30,
-        .name = "jr NC,i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x31,
-        .name = "ld SP,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0x32,
-        .name = "ld (HL-),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x33,
-        .name = "inc SP",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x34,
-        .name = "inc (HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0x35,
-        .name = "dec (HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0x36,
-        .name = "ld (HL),u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 3
-    },
-    {
-        .op = 0x37,
-        .name = "scf",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x38,
-        .name = "jr C,i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x39,
-        .name = "add HL,SP",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x3a,
-        .name = "ld A,(HL-)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x3b,
-        .name = "dec SP",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x3c,
-        .name = "inc A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x3d,
-        .name = "dec A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x3e,
-        .name = "ld A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0x3f,
-        .name = "ccf",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x40,
-        .name = "ld B,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x41,
-        .name = "ld B,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x42,
-        .name = "ld B,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x43,
-        .name = "ld B,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x44,
-        .name = "ld B,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x45,
-        .name = "ld B,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x46,
-        .name = "ld B,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x47,
-        .name = "ld B,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x48,
-        .name = "ld C,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x49,
-        .name = "ld C,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x4a,
-        .name = "ld C,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x4b,
-        .name = "ld C,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x4c,
-        .name = "ld C,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x4d,
-        .name = "ld C,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x4e,
-        .name = "ld C,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x4f,
-        .name = "ld C,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x50,
-        .name = "ld D,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x51,
-        .name = "ld D,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x52,
-        .name = "ld D,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x53,
-        .name = "ld D,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x54,
-        .name = "ld D,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x55,
-        .name = "ld D,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x56,
-        .name = "ld D,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x57,
-        .name = "ld D,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x58,
-        .name = "ld E,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x59,
-        .name = "ld E,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x5a,
-        .name = "ld E,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x5b,
-        .name = "ld E,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x5c,
-        .name = "ld E,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x5d,
-        .name = "ld E,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x5e,
-        .name = "ld E,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x5f,
-        .name = "ld E,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x60,
-        .name = "ld H,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x61,
-        .name = "ld H,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x62,
-        .name = "ld H,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x63,
-        .name = "ld H,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x64,
-        .name = "ld H,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x65,
-        .name = "ld H,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x66,
-        .name = "ld H,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x67,
-        .name = "ld H,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x68,
-        .name = "ld L,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x69,
-        .name = "ld L,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x6a,
-        .name = "ld L,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x6b,
-        .name = "ld L,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x6c,
-        .name = "ld L,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x6d,
-        .name = "ld L,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x6e,
-        .name = "ld L,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x6f,
-        .name = "ld L,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x70,
-        .name = "ld (HL),B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x71,
-        .name = "ld (HL),C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x72,
-        .name = "ld (HL),D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x73,
-        .name = "ld (HL),E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x74,
-        .name = "ld (HL),H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x75,
-        .name = "ld (HL),L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x76,
-        .name = "halt",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x77,
-        .name = "ld (HL),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x78,
-        .name = "ld A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x79,
-        .name = "ld A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x7a,
-        .name = "ld A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x7b,
-        .name = "ld A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x7c,
-        .name = "ld A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x7d,
-        .name = "ld A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x7e,
-        .name = "ld A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x7f,
-        .name = "ld A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x80,
-        .name = "add A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x81,
-        .name = "add A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x82,
-        .name = "add A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x83,
-        .name = "add A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x84,
-        .name = "add A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x85,
-        .name = "add A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x86,
-        .name = "add A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x87,
-        .name = "add A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x88,
-        .name = "adc A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x89,
-        .name = "adc A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x8a,
-        .name = "adc A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x8b,
-        .name = "adc A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x8c,
-        .name = "adc A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x8d,
-        .name = "adc A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x8e,
-        .name = "adc A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x8f,
-        .name = "adc A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x90,
-        .name = "sub A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x91,
-        .name = "sub A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x92,
-        .name = "sub A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x93,
-        .name = "sub A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x94,
-        .name = "sub A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x95,
-        .name = "sub A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x96,
-        .name = "sub A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x97,
-        .name = "sub A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x98,
-        .name = "sbc A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x99,
-        .name = "sbc A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x9a,
-        .name = "sbc A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x9b,
-        .name = "sbc A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x9c,
-        .name = "sbc A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x9d,
-        .name = "sbc A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0x9e,
-        .name = "sbc A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0x9f,
-        .name = "sbc A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa0,
-        .name = "and A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa1,
-        .name = "and A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa2,
-        .name = "and A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa3,
-        .name = "and A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa4,
-        .name = "and A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa5,
-        .name = "and A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa6,
-        .name = "and A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xa7,
-        .name = "and A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa8,
-        .name = "xor A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xa9,
-        .name = "xor A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xaa,
-        .name = "xor A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xab,
-        .name = "xor A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xac,
-        .name = "xor A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xad,
-        .name = "xor A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xae,
-        .name = "xor A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xaf,
-        .name = "xor A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb0,
-        .name = "or A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb1,
-        .name = "or A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb2,
-        .name = "or A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb3,
-        .name = "or A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb4,
-        .name = "or A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb5,
-        .name = "or A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb6,
-        .name = "or A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xb7,
-        .name = "or A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb8,
-        .name = "cp A,B",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xb9,
-        .name = "cp A,C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xba,
-        .name = "cp A,D",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xbb,
-        .name = "cp A,E",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xbc,
-        .name = "cp A,H",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xbd,
-        .name = "cp A,L",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xbe,
-        .name = "cp A,(HL)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xbf,
-        .name = "cp A,A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xc0,
-        .name = "ret NZ",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xc1,
-        .name = "pop BC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0xc2,
-        .name = "jp NZ,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xc3,
-        .name = "jp u16",
-        .func = func_c3,
-        .size = 3,
-        .cycles = 4
-    },
-    {
-        .op = 0xc4,
-        .name = "call NZ,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xc5,
-        .name = "push BC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xc6,
-        .name = "add A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xc7,
-        .name = "rst 00h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xc8,
-        .name = "ret Z",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xc9,
-        .name = "ret",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xca,
-        .name = "jp Z,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xcb,
-        .name = "prefix CB",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xcc,
-        .name = "call Z,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xcd,
-        .name = "call u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 6
-    },
-    {
-        .op = 0xce,
-        .name = "adc A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xcf,
-        .name = "rst 08h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xd0,
-        .name = "ret NC",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xd1,
-        .name = "pop DE",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0xd2,
-        .name = "jp NC,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xd3,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xd4,
-        .name = "call NC,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xd5,
-        .name = "push DE",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xd6,
-        .name = "sub A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xd7,
-        .name = "rst 10h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xd8,
-        .name = "ret C",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xd9,
-        .name = "reti",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xda,
-        .name = "jp C,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xdb,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xdc,
-        .name = "call C,u16",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 3
-    },
-    {
-        .op = 0xdd,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xde,
-        .name = "sbc A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xdf,
-        .name = "rst 18h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xe0,
-        .name = "ld (FF00+u8),A",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 3
-    },
-    {
-        .op = 0xe1,
-        .name = "pop HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0xe2,
-        .name = "ld (FF00+C),A",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xe3,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xe4,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xe5,
-        .name = "push HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xe6,
-        .name = "and A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xe7,
-        .name = "rst 20h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xe8,
-        .name = "add SP,i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 4
-    },
-    {
-        .op = 0xe9,
-        .name = "jp HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xea,
-        .name = "ld (u16),A",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 4
-    },
-    {
-        .op = 0xeb,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xec,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xed,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xee,
-        .name = "xor A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xef,
-        .name = "rst 28h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xf0,
-        .name = "ld A,(FF00+u8)",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 3
-    },
-    {
-        .op = 0xf1,
-        .name = "pop AF",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 3
-    },
-    {
-        .op = 0xf2,
-        .name = "ld A,(FF00+C)",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xf3,
-        .name = "di",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xf4,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xf5,
-        .name = "push AF",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xf6,
-        .name = "or A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xf7,
-        .name = "rst 30h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    },
-    {
-        .op = 0xf8,
-        .name = "ld HL,SP+i8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 3
-    },
-    {
-        .op = 0xf9,
-        .name = "ld SP,HL",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 2
-    },
-    {
-        .op = 0xfa,
-        .name = "ld A,(u16)",
-        .func = func_not_implemented,
-        .size = 3,
-        .cycles = 4
-    },
-    {
-        .op = 0xfb,
-        .name = "ei",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 1
-    },
-    {
-        .op = 0xfc,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xfd,
-        .name = "invalid",
-        .func = func_invalid,
-        .size = 1,
-        .cycles = 0
-    },
-    {
-        .op = 0xfe,
-        .name = "cp A,u8",
-        .func = func_not_implemented,
-        .size = 2,
-        .cycles = 2
-    },
-    {
-        .op = 0xff,
-        .name = "rst 38h",
-        .func = func_not_implemented,
-        .size = 1,
-        .cycles = 4
-    }
+static const char *opcodes[OPCODE_COUNT] = {
+    "nop",
+    "ld BC,u16",
+    "ld (BC),A",
+    "inc BC",
+    "inc B",
+    "dec B",
+    "ld B,u8",
+    "rlca",
+    "ld (u16),SP",
+    "add HL,BC",
+    "ld A,(BC)",
+    "dec BC",
+    "inc C",
+    "dec C",
+    "ld C,u8",
+    "rrca",
+    "stop",
+    "ld DE,u16",
+    "ld (DE),A",
+    "inc DE",
+    "inc D",
+    "dec D",
+    "ld D,u8",
+    "rla",
+    "jr i8",
+    "add HL,DE",
+    "ld A,(DE)",
+    "dec DE",
+    "inc E",
+    "dec E",
+    "ld E,u8",
+    "rra",
+    "jr NZ,i8",
+    "ld HL,u16",
+    "ld (HL+),A",
+    "inc HL",
+    "inc H",
+    "dec H",
+    "ld H,u8",
+    "daa",
+    "jr Z,i8",
+    "add HL,HL",
+    "ld A,(HL+)",
+    "dec HL",
+    "inc L",
+    "dec L",
+    "ld L,u8",
+    "cpl",
+    "jr NC,i8",
+    "ld SP,u16",
+    "ld (HL-),A",
+    "inc SP",
+    "inc (HL)",
+    "dec (HL)",
+    "ld (HL),u8",
+    "scf",
+    "jr C,i8",
+    "add HL,SP",
+    "ld A,(HL-)",
+    "dec SP",
+    "inc A",
+    "dec A",
+    "ld A,u8",
+    "ccf",
+    "ld B,B",
+    "ld B,C",
+    "ld B,D",
+    "ld B,E",
+    "ld B,H",
+    "ld B,L",
+    "ld B,(HL)",
+    "ld B,A",
+    "ld C,B",
+    "ld C,C",
+    "ld C,D",
+    "ld C,E",
+    "ld C,H",
+    "ld C,L",
+    "ld C,(HL)",
+    "ld C,A",
+    "ld D,B",
+    "ld D,C",
+    "ld D,D",
+    "ld D,E",
+    "ld D,H",
+    "ld D,L",
+    "ld D,(HL)",
+    "ld D,A",
+    "ld E,B",
+    "ld E,C",
+    "ld E,D",
+    "ld E,E",
+    "ld E,H",
+    "ld E,L",
+    "ld E,(HL)",
+    "ld E,A",
+    "ld H,B",
+    "ld H,C",
+    "ld H,D",
+    "ld H,E",
+    "ld H,H",
+    "ld H,L",
+    "ld H,(HL)",
+    "ld H,A",
+    "ld L,B",
+    "ld L,C",
+    "ld L,D",
+    "ld L,E",
+    "ld L,H",
+    "ld L,L",
+    "ld L,(HL)",
+    "ld L,A",
+    "ld (HL),B",
+    "ld (HL),C",
+    "ld (HL),D",
+    "ld (HL),E",
+    "ld (HL),H",
+    "ld (HL),L",
+    "halt",
+    "ld (HL),A",
+    "ld A,B",
+    "ld A,C",
+    "ld A,D",
+    "ld A,E",
+    "ld A,H",
+    "ld A,L",
+    "ld A,(HL)",
+    "ld A,A",
+    "add A,B",
+    "add A,C",
+    "add A,D",
+    "add A,E",
+    "add A,H",
+    "add A,L",
+    "add A,(HL)",
+    "add A,A",
+    "adc A,B",
+    "adc A,C",
+    "adc A,D",
+    "adc A,E",
+    "adc A,H",
+    "adc A,L",
+    "adc A,(HL)",
+    "adc A,A",
+    "sub A,B",
+    "sub A,C",
+    "sub A,D",
+    "sub A,E",
+    "sub A,H",
+    "sub A,L",
+    "sub A,(HL)",
+    "sub A,A",
+    "sbc A,B",
+    "sbc A,C",
+    "sbc A,D",
+    "sbc A,E",
+    "sbc A,H",
+    "sbc A,L",
+    "sbc A,(HL)",
+    "sbc A,A",
+    "and A,B",
+    "and A,C",
+    "and A,D",
+    "and A,E",
+    "and A,H",
+    "and A,L",
+    "and A,(HL)",
+    "and A,A",
+    "xor A,B",
+    "xor A,C",
+    "xor A,D",
+    "xor A,E",
+    "xor A,H",
+    "xor A,L",
+    "xor A,(HL)",
+    "xor A,A",
+    "or A,B",
+    "or A,C",
+    "or A,D",
+    "or A,E",
+    "or A,H",
+    "or A,L",
+    "or A,(HL)",
+    "or A,A",
+    "cp A,B",
+    "cp A,C",
+    "cp A,D",
+    "cp A,E",
+    "cp A,H",
+    "cp A,L",
+    "cp A,(HL)",
+    "cp A,A",
+    "ret NZ",
+    "pop BC",
+    "jp NZ,u16",
+    "jp u16",
+    "call NZ,u16",
+    "push BC",
+    "add A,u8",
+    "rst 00h",
+    "ret Z",
+    "ret",
+    "jp Z,u16",
+    "prefix CB",
+    "call Z,u16",
+    "call u16",
+    "adc A,u8",
+    "rst 08h",
+    "ret NC",
+    "pop DE",
+    "jp NC,u16",
+    "invalid",
+    "call NC,u16",
+    "push DE",
+    "sub A,u8",
+    "rst 10h",
+    "ret C",
+    "reti",
+    "jp C,u16",
+    "invalid",
+    "call C,u16",
+    "invalid",
+    "sbc A,u8",
+    "rst 18h",
+    "ld (FF00+u8),A",
+    "pop HL",
+    "ld (FF00+C),A",
+    "invalid",
+    "invalid",
+    "push HL",
+    "and A,u8",
+    "rst 20h",
+    "add SP,i8",
+    "jp HL",
+    "ld (u16),A",
+    "invalid",
+    "invalid",
+    "invalid",
+    "xor A,u8",
+    "rst 28h",
+    "ld A,(FF00+u8)",
+    "pop AF",
+    "ld A,(FF00+C)",
+    "di",
+    "invalid",
+    "push AF",
+    "or A,u8",
+    "rst 30h",
+    "ld HL,SP+i8",
+    "ld SP,HL",
+    "ld A,(u16)",
+    "ei",
+    "invalid",
+    "invalid",
+    "cp A,u8",
+    "rst 38h",
 };
+
+static inline void debug_print_op(struct gb_s *gb, uint8_t op)
+{
+    printf("0x%04x: 0x%02x: %s\n", gb->cpu.regs.pc, op, opcodes[op]);
+}
+
+#endif /* !_BOI_DEBUG */
 
 #endif /* !BOI_OPS_H */
