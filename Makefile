@@ -23,9 +23,10 @@ all: release
 
 $(BIN): $(OBJ)
 $(BIN):
-	$(CC) $^ -o $@
+	$(CC) $(LDFLAGS) $^ -o $@
 
 release: CFLAGS += -O2
+release: LDFLAGS += -s
 release: $(BIN)
 
 debug: CPPFLAGS += -D_BOI_DEBUG
