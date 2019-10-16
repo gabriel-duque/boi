@@ -43,6 +43,310 @@ void cpu_init(struct gb_s *gb)
 }
 
 /*
+ * Here are all the operations after a 0xcb prefix.
+ *
+ * See the func_cb function for more details.
+ */
+
+static void func_rlc(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_rrc(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_rl(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_rr(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_sla(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_sra(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_swap(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_srl(struct gb_s *gb, uint8_t reg)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            break;
+        case 0x01: /* C */
+            break;
+        case 0x02: /* D */
+            break;
+        case 0x03: /* E */
+            break;
+        case 0x04: /* H */
+            break;
+        case 0x05: /* L */
+            break;
+        case 0x06: /* (HL) */
+            break;
+        case 0x07: /* A */
+            break;
+    }
+}
+
+static void func_bit(struct gb_s *gb, uint8_t reg, uint8_t mask)
+{
+    switch(reg) {
+        case 0x00: /* B */
+            gb->cpu.flags.z = !(gb->cpu.regs.b & mask);
+            break;
+        case 0x01: /* C */
+            gb->cpu.flags.z = !(gb->cpu.regs.c & mask);
+            break;
+        case 0x02: /* D */
+            gb->cpu.flags.z = !(gb->cpu.regs.d & mask);
+            break;
+        case 0x03: /* E */
+            gb->cpu.flags.z = !(gb->cpu.regs.e & mask);
+            break;
+        case 0x04: /* H */
+            gb->cpu.flags.z = !(gb->cpu.regs.h & mask);
+            break;
+        case 0x05: /* L */
+            gb->cpu.flags.z = !(gb->cpu.regs.l & mask);
+            break;
+        case 0x06: /* (HL) */
+            gb->cpu.flags.z = !(mem_get_byte(gb, gb->cpu.regs.hl) & mask);
+            gb->cpu.cycles += 1;
+            break;
+        case 0x07: /* A */
+            gb->cpu.flags.z = !(gb->cpu.regs.a & mask);
+            break;
+    }
+    gb->cpu.flags.n = false;
+    gb->cpu.flags.h = true;
+}
+
+static void func_res(struct gb_s *gb, uint8_t reg, uint8_t mask)
+{
+    uint8_t tmp;
+    switch(reg) {
+        case 0x00: /* B */
+            gb->cpu.regs.b &= ~mask;
+            break;
+        case 0x01: /* C */
+            gb->cpu.regs.c &= ~mask;
+            break;
+        case 0x02: /* D */
+            gb->cpu.regs.d &= ~mask;
+            break;
+        case 0x03: /* E */
+            gb->cpu.regs.e &= ~mask;
+            break;
+        case 0x04: /* H */
+            gb->cpu.regs.h &= ~mask;
+            break;
+        case 0x05: /* L */
+            gb->cpu.regs.l &= ~mask;
+            break;
+        case 0x06: /* (HL) */
+            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp &= ~mask;
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
+            gb->cpu.cycles += 2;
+            break;
+        case 0x07: /* A */
+            gb->cpu.regs.a &= ~mask;
+            break;
+    }
+}
+
+static void func_set(struct gb_s *gb, uint8_t reg, uint8_t mask)
+{
+    uint8_t tmp;
+    switch(reg) {
+        case 0x00: /* B */
+            gb->cpu.regs.b &= ~mask;
+            break;
+        case 0x01: /* C */
+            gb->cpu.regs.c &= ~mask;
+            break;
+        case 0x02: /* D */
+            gb->cpu.regs.d &= ~mask;
+            break;
+        case 0x03: /* E */
+            gb->cpu.regs.e &= ~mask;
+            break;
+        case 0x04: /* H */
+            gb->cpu.regs.h &= ~mask;
+            break;
+        case 0x05: /* L */
+            gb->cpu.regs.l &= ~mask;
+            break;
+        case 0x06: /* (HL) */
+            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp &= ~mask;
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
+            gb->cpu.cycles += 2;
+            break;
+        case 0x07: /* A */
+            gb->cpu.regs.a &= ~mask;
+            break;
+    }
+}
+
+static void (*const cb_single_ops[CB_SINGLE_OP_COUNT])
+    (struct gb_s*, uint8_t) = {
+
+        func_rlc,
+        func_rrc,
+        func_rl,
+        func_rr,
+        func_sla,
+        func_sra,
+        func_swap,
+        func_srl
+    };
+
+static void (*const cb_double_ops[CB_DOUBLE_OP_COUNT])
+    (struct gb_s *, uint8_t, uint8_t) = {
+
+        func_bit,
+        func_res,
+        func_set
+    };
+
+/*
  * These are all the static inline functions called in the *big* switch later.
  *
  * For the sake of simplicity there is one function for unhandled opcodes,
@@ -132,10 +436,68 @@ static inline void func_c3(struct gb_s *gb)
 
 }
 
+/*
+ * 0xcb is a prefix opcode which allows the use of 256 other opcodes.
+ *
+ * We read the real opcode from PC + 1 and it looks like this:
+ *
+ *      00000xxx = rlc xxx
+ *      00001xxx = rrc xxx
+ *      00010xxx = rl xxx
+ *      00011xxx = rr xxx
+ *      00100xxx = sla xxx
+ *      00101xxx = sra xxx
+ *      00110xxx = swap xxx
+ *      00111xxx = srl xxx
+ *      01yyyxxx = bit yyy, xxx
+ *      10yyyxxx = res yyy, xxx
+ *      11yyyxxx = set yyy, xxx
+ *
+ * where xxx encodes a register as follows:
+ *
+ *      000: B
+ *      001: C
+ *      010: D
+ *      011: E
+ *      100: H
+ *      101: L
+ *      110: (HL)
+ *      111: A
+ *
+ * When present yyy is the index of the bit to operate on.
+ *
+ */
 static inline void func_cb(struct gb_s *gb)
 {
-    /* TODO: handle CB prefix */
-    (void) gb;
+    uint8_t op;
+    uint8_t reg;
+    uint8_t bit;
+
+    /* Opcodes will last at least 2 cycles and are all of length 2 bytes */
+    gb->cpu.regs.sp += 2;
+    gb->cpu.cycles += 2;
+
+    op = gb->mem[gb->cpu.regs.pc + 1];
+
+    /* Get register and check if it is a single operand opcode */
+    reg = op & 0x07;
+    op >>= 3;
+
+    /* It is, call function and return */
+    if (op < 0x08) {
+        cb_single_ops[op](gb, reg);
+        return;
+    }
+
+    /* It's a double operand opcode, decode bit index and call function */
+    bit = op & 0x0f;
+    op >>= 3;
+
+    /*
+     * Opcode id go through 1 to 3 so op - 1 index.
+     * 1 << bit creates the mask for the operation.
+     */
+    cb_double_ops[op - 1](gb, reg, 1 << bit);
 }
 
 static inline void func_cd(struct gb_s *gb)
@@ -324,7 +686,7 @@ bool cpu_cycle(struct gb_s *gb)
             break;
         default: /* We haven't implemented this opcode yet */
             func_not_implemented(gb, op);
-            break;
+            return false;
     }
 
     return true;

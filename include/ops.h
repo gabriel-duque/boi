@@ -1,12 +1,15 @@
 #ifndef BOI_OPS_H
 #define BOI_OPS_H
 
+#define CB_SINGLE_OP_COUNT 8
+#define CB_DOUBLE_OP_COUNT 3
+
 #ifdef _BOI_DEBUG
 
 #include <stdint.h>
 #include <stdio.h>
 
-#define OPCODE_COUNT    256
+#define OPCODE_COUNT 256
 
 static const char *opcodes[OPCODE_COUNT] = {
     "nop",
