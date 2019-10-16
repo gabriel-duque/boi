@@ -392,31 +392,31 @@ static void func_res(struct gb_s *gb, uint8_t reg, uint8_t mask)
     uint8_t tmp;
     switch(reg) {
         case 0x00: /* B */
-            gb->cpu.regs.b &= ~mask;
+            gb->cpu.regs.b |= mask;
             break;
         case 0x01: /* C */
-            gb->cpu.regs.c &= ~mask;
+            gb->cpu.regs.c |= mask;
             break;
         case 0x02: /* D */
-            gb->cpu.regs.d &= ~mask;
+            gb->cpu.regs.d |= mask;
             break;
         case 0x03: /* E */
-            gb->cpu.regs.e &= ~mask;
+            gb->cpu.regs.e |= mask;
             break;
         case 0x04: /* H */
-            gb->cpu.regs.h &= ~mask;
+            gb->cpu.regs.h |= mask;
             break;
         case 0x05: /* L */
-            gb->cpu.regs.l &= ~mask;
+            gb->cpu.regs.l |= mask;
             break;
         case 0x06: /* (HL) */
             tmp = mem_get_byte(gb, gb->cpu.regs.hl);
-            tmp &= ~mask;
+            tmp |= mask;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
             gb->cpu.cycles += 2;
             break;
         case 0x07: /* A */
-            gb->cpu.regs.a &= ~mask;
+            gb->cpu.regs.a |= mask;
             break;
     }
 }
