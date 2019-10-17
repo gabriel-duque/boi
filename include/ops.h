@@ -272,7 +272,17 @@ static const char *opcodes[OPCODE_COUNT] = {
 
 static inline void debug_print_op(struct gb_s *gb, uint8_t op)
 {
-    printf("0x%04x: 0x%02x: %s\n", gb->cpu.regs.pc, op, opcodes[op]);
+    printf("0x%04x:\n\t0x%02x: %s\n", gb->cpu.regs.pc, op, opcodes[op]);
+    printf("\t\tA: 0x%02x B: 0x%02x C: 0x%02x D: 0x%02x E: 0x%02x "
+            "F: 0x%02x H: 0x%02x L: 0x%02x\n", gb->cpu.regs.a,
+            gb->cpu.regs.b, gb->cpu.regs.c, gb->cpu.regs.d, gb->cpu.regs.e,
+            gb->cpu.regs.f, gb->cpu.regs.h, gb->cpu.regs.l);
+    printf("\t\tAF: 0x%04x BC: 0x%04x DE: 0x%04x HL: 0x%04x\n",
+            gb->cpu.regs.af, gb->cpu.regs.bc,
+            gb->cpu.regs.de, gb->cpu.regs.hl);
+    printf("\t\tPC: 0x%04x SP: 0x%04x\n", gb->cpu.regs.pc, gb->cpu.regs.sp);
+    printf("\t\tZ: %ud N: %ud H: %ud C: %ud\n", get_flag_z, get_flag_n,
+            get_flag_h, get_flag_c);
 }
 
 #endif /* !_BOI_DEBUG */
