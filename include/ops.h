@@ -281,7 +281,7 @@ static inline void debug_print_op(struct gb_s *gb, uint8_t op)
             gb->cpu.regs.af, gb->cpu.regs.bc,
             gb->cpu.regs.de, gb->cpu.regs.hl);
     printf("\t\tPC: 0x%04x SP: 0x%04x\n", gb->cpu.regs.pc, gb->cpu.regs.sp);
-    printf("\t\tZ: %ud N: %ud H: %ud C: %ud\n", get_flag_z, get_flag_n,
+    printf("\t\tZ: %u N: %u H: %u C: %u\n", get_flag_z, get_flag_n,
             get_flag_h, get_flag_c);
 }
 
