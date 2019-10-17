@@ -9,6 +9,17 @@
 /* To avoid unused variable error */
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
+/* Macros to access flag bit values individually */
+#define set_flag_z(x) (gb->cpu.regs.f = (gb->cpu.regs.f & 0x7f) | ((x) << 7))
+#define set_flag_n(x) (gb->cpu.regs.f = (gb->cpu.regs.f & 0xbf) | ((x) << 6))
+#define set_flag_h(x) (gb->cpu.regs.f = (gb->cpu.regs.f & 0xdf) | ((x) << 5))
+#define set_flag_c(x) (gb->cpu.regs.f = (gb->cpu.regs.f & 0xef) | ((x) << 4))
+
+#define get_flag_z !!((gb->cpu.regs.f & 0x80))
+#define get_flag_n !!((gb->cpu.regs.f & 0x40))
+#define get_flag_h !!((gb->cpu.regs.f & 0x20))
+#define get_flag_c !!((gb->cpu.regs.f & 0x10))
+
 /******************************************************************************
  * CPU related types
  */
@@ -17,6 +28,7 @@
 struct regs_s {
     union {
         struct {
+            /* f is the flag register */
             uint8_t f;
             uint8_t a;
         };
@@ -51,43 +63,11 @@ struct regs_s {
     uint16_t pc;
 };
 
-/* Flags register */
-struct flags_s {
-
-    /*
-     * Zero: set if the result of a math operation is zero or two values become
-     * equal
-     */
-    bool z;
-
-    /*
-     * Substract flag: set if the last math operation performed a
-     * substraction
-     */
-    bool n;
-
-    /*
-     * Half carry flag: set if a carry occurred from the lower nibble in the
-     * last math operation
-     */
-    bool h;
-
-    /*
-     * Carry: set if a carry occured from the lower nibble in the last math
-     * operation.
-     */
-    bool c;
-
-};
-
 /* The actual CPU structure */
 struct cpu_s {
 
     /* Registers */
     struct regs_s regs;
-
-    /* Flags */
-    struct flags_s flags;
 
     /* Interrupts are enabled */
     bool irq;
