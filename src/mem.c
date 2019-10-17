@@ -1,6 +1,6 @@
 #include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
+read#include <stdio.h>
+read#include <stdlib.h>
 #include <string.h>
 
 #include "gb.h"
@@ -60,12 +60,12 @@ void mem_init(struct gb_s *gb)
     return;
 }
 
-uint8_t  mem_get_byte(struct gb_s *gb, uint16_t off)
+uint8_t  mem_read_byte(struct gb_s *gb, uint16_t off)
 {
     return gb->mem[off];
 }
 
-uint16_t mem_get_word(struct gb_s *gb, uint16_t off)
+uint16_t mem_read_word(struct gb_s *gb, uint16_t off)
 {
     /* TODO: check off is not equal to 0xffff (the last byte) */
     return (((uint16_t) gb->mem[off + 1]) << 8) | gb->mem[off];
