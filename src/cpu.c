@@ -87,7 +87,7 @@ static void func_rlc(struct gb_s *gb, uint8_t reg)
             gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             old = tmp >> 7;
             tmp = tmp << 1 | old;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
@@ -142,7 +142,7 @@ static void func_rrc(struct gb_s *gb, uint8_t reg)
             gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             old = tmp & 0x1;
             tmp = tmp >> 1 | old << 7;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
@@ -197,7 +197,7 @@ static void func_rl(struct gb_s *gb, uint8_t reg)
             gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             gb->cpu.flags.c = tmp >> 7;
             tmp = tmp << 1 | tmp_c;
             gb->cpu.flags.z = !tmp;
@@ -250,7 +250,7 @@ static void func_rr(struct gb_s *gb, uint8_t reg)
             gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             gb->cpu.flags.c = tmp & 0x1;
             tmp = tmp >> 1 | tmp_c << 7;;
             gb->cpu.flags.z = !tmp;
@@ -268,90 +268,214 @@ static void func_rr(struct gb_s *gb, uint8_t reg)
 
 static void func_sla(struct gb_s *gb, uint8_t reg)
 {
+    uint8_t tmp;
+
     switch(reg) {
         case 0x00: /* B */
+            gb->cpu.flags.c = gb->cpu.regs.b >> 7;
+            gb->cpu.regs.b <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.b;
             break;
         case 0x01: /* C */
+            gb->cpu.flags.c = gb->cpu.regs.c >> 7;
+            gb->cpu.regs.c <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.c;
             break;
         case 0x02: /* D */
+            gb->cpu.flags.c = gb->cpu.regs.d >> 7;
+            gb->cpu.regs.d <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.d;
             break;
         case 0x03: /* E */
+            gb->cpu.flags.c = gb->cpu.regs.e >> 7;
+            gb->cpu.regs.e <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.e;
             break;
         case 0x04: /* H */
+            gb->cpu.flags.c = gb->cpu.regs.h >> 7;
+            gb->cpu.regs.h <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.h;
             break;
         case 0x05: /* L */
+            gb->cpu.flags.c = gb->cpu.regs.l >> 7;
+            gb->cpu.regs.l <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
+            gb->cpu.flags.c = tmp >> 7;
+            tmp <<= 1;
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
+            gb->cpu.flags.z = !tmp;
+            gb->cpu.cycles += 2;
             break;
         case 0x07: /* A */
+            gb->cpu.flags.c = gb->cpu.regs.a >> 7;
+            gb->cpu.regs.a <<= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.a;
             break;
     }
+    gb->cpu.flags.h = false;
+    gb->cpu.flags.n = false;
 }
 
 static void func_sra(struct gb_s *gb, uint8_t reg)
 {
+    uint8_t old;
+    uint8_t tmp;
+
     switch(reg) {
         case 0x00: /* B */
+            gb->cpu.flags.c = gb->cpu.regs.b & 0x01;
+            old = gb->cpu.regs.b & 0x80;
+            gb->cpu.regs.b = gb->cpu.regs.b >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.b;
             break;
         case 0x01: /* C */
+            gb->cpu.flags.c = gb->cpu.regs.c & 0x01;
+            old = gb->cpu.regs.c & 0x80;
+            gb->cpu.regs.c = gb->cpu.regs.c >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.c;
             break;
         case 0x02: /* D */
+            gb->cpu.flags.c = gb->cpu.regs.d & 0x01;
+            old = gb->cpu.regs.d & 0x80;
+            gb->cpu.regs.d = gb->cpu.regs.d >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.d;
             break;
         case 0x03: /* E */
+            gb->cpu.flags.c = gb->cpu.regs.e & 0x01;
+            old = gb->cpu.regs.e & 0x80;
+            gb->cpu.regs.e = gb->cpu.regs.e >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.e;
             break;
         case 0x04: /* H */
+            gb->cpu.flags.c = gb->cpu.regs.h & 0x01;
+            old = gb->cpu.regs.h & 0x80;
+            gb->cpu.regs.h = gb->cpu.regs.h >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.h;
             break;
         case 0x05: /* L */
+            gb->cpu.flags.c = gb->cpu.regs.l & 0x01;
+            old = gb->cpu.regs.l & 0x80;
+            gb->cpu.regs.l = gb->cpu.regs.l >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
+            gb->cpu.flags.c = tmp & 0x01;
+            old = tmp & 0x80;
+            tmp = tmp >> 1 | old;
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
+            gb->cpu.flags.z = !tmp;
+            gb->cpu.cycles += 2;
             break;
         case 0x07: /* A */
+            gb->cpu.flags.c = gb->cpu.regs.a & 0x01;
+            old = gb->cpu.regs.a & 0x80;
+            gb->cpu.regs.a = gb->cpu.regs.a >> 1 | old;
+            gb->cpu.flags.z = !gb->cpu.regs.a;
             break;
     }
+    gb->cpu.flags.h = false;
+    gb->cpu.flags.n = false;
 }
 
 static void func_swap(struct gb_s *gb, uint8_t reg)
 {
     switch(reg) {
         case 0x00: /* B */
+            gb->cpu.regs.b = gb->cpu.regs.b << 4 | gb->cpu.regs.b >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.b;
             break;
         case 0x01: /* C */
+            gb->cpu.regs.c = gb->cpu.regs.c << 4 | gb->cpu.regs.c >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.c;
             break;
         case 0x02: /* D */
+            gb->cpu.regs.d = gb->cpu.regs.d << 4 | gb->cpu.regs.d >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.d;
             break;
         case 0x03: /* E */
+            gb->cpu.regs.e = gb->cpu.regs.e << 4 | gb->cpu.regs.e >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.e;
             break;
         case 0x04: /* H */
+            gb->cpu.regs.h = gb->cpu.regs.h << 4 | gb->cpu.regs.h >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.h;
             break;
         case 0x05: /* L */
+            gb->cpu.regs.l = gb->cpu.regs.l << 4 | gb->cpu.regs.l >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
+            tmp = tmp << 4 | tmp >> 4;
+            mem_write_byte(gb, gb->cpu.regs.hl);
+            gb->cpu.flags.z = !tmp;
+            gb->cpu.cycles += 2;
             break;
         case 0x07: /* A */
+            gb->cpu.regs.a = gb->cpu.regs.a << 4 | gb->cpu.regs.a >> 4;
+            gb->cpu.flags.z = !gb->cpu.regs.a;
             break;
     }
+    gb->cpu.flags.n = false;
+    gb->cpu.flags.h = false;
+    gb->cpu.flags.c = false;
 }
 
 static void func_srl(struct gb_s *gb, uint8_t reg)
 {
+    uint8_t tmp;
+
     switch(reg) {
         case 0x00: /* B */
+            gb->cpu.flags.c = gb->cpu.regs.b & 0x01;
+            gb->cpu.regs.b >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.b;
             break;
         case 0x01: /* C */
+            gb->cpu.flags.c = gb->cpu.regs.c & 0x01;
+            gb->cpu.regs.c >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.c;
             break;
         case 0x02: /* D */
+            gb->cpu.flags.c = gb->cpu.regs.d & 0x01;
+            gb->cpu.regs.d >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.d;
             break;
         case 0x03: /* E */
+            gb->cpu.flags.c = gb->cpu.regs.e & 0x01;
+            gb->cpu.regs.e >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.e;
             break;
         case 0x04: /* H */
+            gb->cpu.flags.c = gb->cpu.regs.h & 0x01;
+            gb->cpu.regs.h >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.h;
             break;
         case 0x05: /* L */
+            gb->cpu.flags.c = gb->cpu.regs.l & 0x01;
+            gb->cpu.regs.l >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
+            tmp = mem_read_byte(gb->cpu.regs.hl);
+            gb->cpu.flags.c = tmp & 0x01;
+            tmp >>= 1;
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
+            gb->cpu.flags.z = !tmp;
+            gb->cpu.cycles += 2;
             break;
         case 0x07: /* A */
+            gb->cpu.flags.c = gb->cpu.regs.a & 0x01;
+            gb->cpu.regs.a >>= 1;
+            gb->cpu.flags.z = !gb->cpu.regs.a;
             break;
     }
+    gb->cpu.flags.h = false;
+    gb->cpu.flags.n = false;
 }
 
 static void func_bit(struct gb_s *gb, uint8_t reg, uint8_t mask)
@@ -376,7 +500,7 @@ static void func_bit(struct gb_s *gb, uint8_t reg, uint8_t mask)
             gb->cpu.flags.z = !(gb->cpu.regs.l & mask);
             break;
         case 0x06: /* (HL) */
-            gb->cpu.flags.z = !(mem_get_byte(gb, gb->cpu.regs.hl) & mask);
+            gb->cpu.flags.z = !(mem_read_byte(gb, gb->cpu.regs.hl) & mask);
             gb->cpu.cycles += 1;
             break;
         case 0x07: /* A */
@@ -410,7 +534,7 @@ static void func_res(struct gb_s *gb, uint8_t reg, uint8_t mask)
             gb->cpu.regs.l |= mask;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             tmp |= mask;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
             gb->cpu.cycles += 2;
@@ -444,7 +568,7 @@ static void func_set(struct gb_s *gb, uint8_t reg, uint8_t mask)
             gb->cpu.regs.l |= mask;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_get_byte(gb, gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             tmp |= mask;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
             gb->cpu.cycles += 2;
@@ -521,7 +645,7 @@ static inline void func_18(struct gb_s *gb)
 {
 
     gb->cpu.cycles += 3;
-    gb->cpu.regs.pc += (int8_t) mem_get_byte(gb, gb->mem[gb->cpu.regs.sp + 1])
+    gb->cpu.regs.pc += (int8_t) mem_read_byte(gb, gb->mem[gb->cpu.regs.sp + 1])
         + 2;
 
 }
@@ -530,7 +654,7 @@ static inline void func_28(struct gb_s *gb)
 {
     if (gb->cpu.flags.z) {
         /* TODO: check the +2 here is right skipping operands */
-        gb->cpu.regs.pc += (int8_t) mem_get_byte(gb,
+        gb->cpu.regs.pc += (int8_t) mem_read_byte(gb,
                 gb->mem[gb->cpu.regs.sp + 1]) + 2;
         gb->cpu.cycles += 3;
     } else {
@@ -542,7 +666,7 @@ static inline void func_28(struct gb_s *gb)
 
 static inline void func_3e(struct gb_s *gb)
 {
-    gb->cpu.regs.a = mem_get_byte(gb, gb->cpu.regs.pc + 1);
+    gb->cpu.regs.a = mem_read_byte(gb, gb->cpu.regs.pc + 1);
 
     gb->cpu.regs.pc += 2;
     gb->cpu.cycles += 2;
@@ -561,7 +685,7 @@ static inline void func_47(struct gb_s *gb)
 static inline void func_c3(struct gb_s *gb)
 {
     /* TODO: check we are not out of bounds */
-    gb->cpu.regs.pc = mem_get_word(gb, gb->cpu.regs.pc + 1);
+    gb->cpu.regs.pc = mem_read_word(gb, gb->cpu.regs.pc + 1);
     gb->cpu.cycles += 4;
 
 }
@@ -604,7 +728,7 @@ static inline void func_cb(struct gb_s *gb)
     uint8_t bit;
 
     /* Opcodes will last at least 2 cycles and are all of length 2 bytes */
-    gb->cpu.regs.sp += 2;
+    gb->cpu.regs.pc += 2;
     gb->cpu.cycles += 2;
 
     op = gb->mem[gb->cpu.regs.pc + 1];
@@ -615,6 +739,11 @@ static inline void func_cb(struct gb_s *gb)
 
     /* It is, call function and return */
     if (op < 0x08) {
+
+#ifdef _BOI_DEBUG
+        printf("\tOp: 0x%02x, Register: 0x%02x\n", op, reg);
+#endif /* !_BOI_DEBUG */
+
         cb_single_ops[op](gb, reg);
         return;
     }
@@ -622,6 +751,10 @@ static inline void func_cb(struct gb_s *gb)
     /* It's a double operand opcode, decode bit index and call function */
     bit = op & 0x0f;
     op >>= 3;
+
+#ifdef _BOI_DEBUG
+    printf("\tOp: 0x%02x, Register: 0x%02x, Bit: 0x%02x\n", op, reg, bit);
+#endif /* !_BOI_DEBUG */
 
     /*
      * An opcode id is always between 1 and 3 so op - 1 is the index.
@@ -637,7 +770,7 @@ static inline void func_cd(struct gb_s *gb)
     /* Skip the current instr and it's two byte operand and push next instr */
     mem_write_word(gb, gb->cpu.regs.sp, gb->cpu.regs.pc + 3);
 
-    gb->cpu.regs.pc = mem_get_byte(gb, gb->cpu.regs.pc + 1);
+    gb->cpu.regs.pc = mem_read_byte(gb, gb->cpu.regs.pc + 1);
 
     gb->cpu.cycles += 6;
 
@@ -659,7 +792,7 @@ static inline void func_af(struct gb_s *gb)
 
 static inline void func_e0(struct gb_s *gb)
 {
-    uint16_t off = 0xff00u + mem_get_byte(gb, gb->cpu.regs.pc + 1);
+    uint16_t off = 0xff00u + mem_read_byte(gb, gb->cpu.regs.pc + 1);
     mem_write_byte(gb, off, gb->cpu.regs.a);
 
     gb->cpu.regs.pc += 2;
@@ -669,7 +802,7 @@ static inline void func_e0(struct gb_s *gb)
 
 static inline void func_ea(struct gb_s *gb)
 {
-    uint16_t off = mem_get_word(gb, gb->cpu.regs.pc + 1);
+    uint16_t off = mem_read_word(gb, gb->cpu.regs.pc + 1);
     mem_write_byte(gb, off, gb->cpu.regs.a);
 
     gb->cpu.regs.pc += 3;
@@ -679,8 +812,8 @@ static inline void func_ea(struct gb_s *gb)
 
 static inline void func_f0(struct gb_s *gb)
 {
-    uint8_t operand = mem_get_byte(gb, gb->cpu.regs.sp + 1);
-    gb->cpu.regs.a = mem_get_byte(gb, 0xff00u + operand);
+    uint8_t operand = mem_read_byte(gb, gb->cpu.regs.sp + 1);
+    gb->cpu.regs.a = mem_read_byte(gb, 0xff00u + operand);
 
     gb->cpu.regs.pc += 2;
     gb->cpu.cycles += 3;
@@ -698,7 +831,7 @@ static inline void func_f3(struct gb_s *gb)
 
 static inline void func_fe(struct gb_s *gb)
 {
-    uint8_t tmp = mem_get_byte(gb, gb->cpu.regs.pc + 1);
+    uint8_t tmp = mem_read_byte(gb, gb->cpu.regs.pc + 1);
     uint8_t a = gb->cpu.regs.a;
 
     gb->cpu.flags.z = (a == tmp);
@@ -725,7 +858,7 @@ bool cpu_cycle(struct gb_s *gb)
     /* TODO: implement interrupt flushing */
 
     /* Fetch opcode */
-    op = mem_get_byte(gb, gb->cpu.regs.pc);
+    op = mem_read_byte(gb, gb->cpu.regs.pc);
 
 #ifdef _BOI_DEBUG
 
