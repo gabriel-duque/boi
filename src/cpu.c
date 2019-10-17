@@ -383,6 +383,8 @@ static void func_sra(struct gb_s *gb, uint8_t reg)
 
 static void func_swap(struct gb_s *gb, uint8_t reg)
 {
+    uint8_t tmp;
+
     switch(reg) {
         case 0x00: /* B */
             gb->cpu.regs.b = gb->cpu.regs.b << 4 | gb->cpu.regs.b >> 4;
@@ -411,7 +413,7 @@ static void func_swap(struct gb_s *gb, uint8_t reg)
         case 0x06: /* (HL) */
             tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             tmp = tmp << 4 | tmp >> 4;
-            mem_write_byte(gb, gb->cpu.regs.hl);
+            mem_write_byte(gb, gb->cpu.regs.hl, tmp);
             gb->cpu.flags.z = !tmp;
             gb->cpu.cycles += 2;
             break;
@@ -461,7 +463,7 @@ static void func_srl(struct gb_s *gb, uint8_t reg)
             gb->cpu.flags.z = !gb->cpu.regs.l;
             break;
         case 0x06: /* (HL) */
-            tmp = mem_read_byte(gb->cpu.regs.hl);
+            tmp = mem_read_byte(gb, gb->cpu.regs.hl);
             gb->cpu.flags.c = tmp & 0x01;
             tmp >>= 1;
             mem_write_byte(gb, gb->cpu.regs.hl, tmp);
