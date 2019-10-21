@@ -1,9 +1,9 @@
-===============================================
-Boi: a humble GameBoy emulator implemented in C
-===============================================
+===================================================
+| Boi: a humble GameBoy emulator implemented in C |
+===================================================
 
 Init:
-=====
+-----
 
     [x] initialize CPU
 
@@ -14,7 +14,7 @@ Init:
     [ ] initialize graphics
 
 CPU:
-====
+----
 
     [x] implement all structs
 
@@ -27,7 +27,7 @@ CPU:
     [ ] handle clock
 
 ESP32:
-======
+------
 
     [ ] implement screen driver
 
@@ -36,7 +36,7 @@ ESP32:
     [ ] integrate it into emulator
 
 Tests:
-======
+------
 
     [ ] do error handling well
 
@@ -44,19 +44,17 @@ Tests:
 
     [ ] write integration tests
 
-    [ ] pass `Blargg's`_ tests
-
-.. _Blargg's: https://gbdev.gg8.se/files/roms/blargg-gb-tests/
+    [ ] pass Blargg's tests
 
 GPU:
-====
+----
 
     [ ] initialize GPU memory
 
     [ ] implement GPU cycle
 
 Misc:
-=====
+-----
 
     [ ] implement a CPU state dump
 
