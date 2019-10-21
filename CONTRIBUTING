@@ -1,0 +1,21 @@
+How to Contribute
+=================
+
+First of all, thanks for reading this! I am really tired of working on this
+project alone.
+
+Writing code
+------------
+
+Please try to follow the Linux kernel coding style which is available at
+https://www.kernel.org/doc/html/v4.10/process/coding-style.html.
+
+A general guideline is to try to keep the code clean and consistent.
+
+Please read the emulator's code before trying to contribute to it.
+
+Submitting code
+---------------
+
+You can either fork the GitHub repository (https://github.com/zuh0/boi) and
+then open a pull request or send patches by mail to gabriel.duque@lse.epita.fr.
