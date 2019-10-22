@@ -749,13 +749,20 @@ static inline void func_0e(struct gb_s *gb)
 /* rrca */
 static inline void func_0f(struct gb_s *gb)
 {
-    UNUSED(gb);
+    /* Call rrc with A register */
+    func_rrc(gb, 0x7);
+    set_flag_z(false);
+
+    ++gb->cpu.regs.pc;
+    ++gb->cpu.cycles;
 }
 
 /* stop */
+/* TODO: handle STOP opcode */
 static inline void func_10(struct gb_s *gb)
 {
     UNUSED(gb);
+    func_invalid(0x10);
 }
 
 /* ld DE, u16 */
@@ -770,7 +777,10 @@ static inline void func_11(struct gb_s *gb)
 /* ld (DE), A */
 static inline void func_12(struct gb_s *gb)
 {
-    UNUSED(gb);
+    mem_write_byte(gb, gb->cpu.regs.de, gb->cpu.regs.a);
+
+    ++gb->cpu.regs.pc;
+    gb->cpu.cycles += 2;
 }
 
 /* inc DE */
@@ -809,13 +819,21 @@ static inline void func_15(struct gb_s *gb)
 /* ld D, u8 */
 static inline void func_16(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.d = mem_read_byte(gb, gb->cpu.regs.pc + 1);
+
+    gb->cpu.regs.pc += 2;
+    gb->cpu.cycles += 2;
 }
 
 /* rla */
 static inline void func_17(struct gb_s *gb)
 {
-    UNUSED(gb);
+    /* Call rl function with register A */
+    func_rl(gb, 0x7);
+    set_flag_z(false);
+
+    ++gb->cpu.regs.pc;
+    ++gb->cpu.cycles;
 }
 
 /* jr rel8 */
@@ -883,13 +901,21 @@ static inline void func_1d(struct gb_s *gb)
 /* ld E, u8 */
 static inline void func_1e(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.e = mem_read_byte(gb, gb->cpu.regs.pc + 1);
+
+    gb->cpu.regs.pc += 2;
+    gb->cpu.cycles += 2;
 }
 
-/* rr A */
+/* rra */
 static inline void func_1f(struct gb_s *gb)
 {
-    UNUSED(gb);
+    /* Call rr function with register A */
+    func_rr(gb, 0x7);
+    set_flag_z(false);
+
+    ++gb->cpu.regs.pc;
+    ++gb->cpu.cycles;
 }
 
 /* jr NZ, rel8 */
@@ -918,7 +944,10 @@ static inline void func_21(struct gb_s *gb)
 /* ldi (HL), A */
 static inline void func_22(struct gb_s *gb)
 {
-    UNUSED(gb);
+    mem_write_byte(gb, gb->cpu.regs.hl++, gb->cpu.regs.a);
+
+    ++gb->cpu.regs.pc;
+    gb->cpu.cycles += 2;
 }
 
 /* inc HL */
@@ -957,7 +986,10 @@ static inline void func_25(struct gb_s *gb)
 /* ld H, u8 */
 static inline void func_26(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.h = mem_read_byte(gb, gb->cpu.regs.pc + 1);
+
+    gb->cpu.regs.pc += 2;
+    gb->cpu.cycles += 2;
 }
 
 /* daa */
@@ -997,7 +1029,10 @@ static inline void func_29(struct gb_s *gb)
 /* ldi A, (HL) */
 static inline void func_2a(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.a  = mem_read_byte(gb, gb->cpu.regs.hl++);
+
+    ++gb->cpu.regs.pc;
+    gb->cpu.cycles += 2;
 }
 
 /* dec HL */
@@ -1036,13 +1071,22 @@ static inline void func_2d(struct gb_s *gb)
 /* ld L, u8 */
 static inline void func_2e(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.l = mem_get_byte(gb->cpu.regs.pc + 1);
+
+    gb->cpu.regs.pc += 2;
+    gb->cpu.cycles += 2;
 }
 
 /* cpl */
 static inline void func_2f(struct gb_s *gb)
 {
-    UNUSED(gb);
+    gb->cpu.regs.a = ~gb->cpu.regs.a;
+
+    set_flag_n(true);
+    set_flag_h(true);
+
+    ++gb->cpu.regs.pc;
+    ++gb->cpu.cycles;
 }
 
 /* jr NC, rel8 */
