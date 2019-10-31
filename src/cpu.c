@@ -2669,7 +2669,7 @@ static inline void func_bf(struct gb_s *gb)
 static inline void func_c0(struct gb_s *gb)
 {
     if (!get_flag_z) {
-        gb->cpu.regs.pc = mem_get_word(gb->cpu.regs.sp);
+        gb->cpu.regs.pc = mem_read_word(gb, gb->cpu.regs.sp);
         gb->cpu.regs.sp += 2;
         gb->cpu.cycles += 5;
     } else {
@@ -2681,7 +2681,7 @@ static inline void func_c0(struct gb_s *gb)
 /* pop BC */
 static inline void func_c1(struct gb_s *gb)
 {
-    gb->cpu.regs.bc = mem_get_word(gb->cpu.regs.sp);
+    gb->cpu.regs.bc = mem_read_word(gb, gb->cpu.regs.sp);
 
     gb->cpu.regs.sp += 2;
     ++gb->cpu.regs.bc;
@@ -2692,7 +2692,7 @@ static inline void func_c1(struct gb_s *gb)
 static inline void func_c2(struct gb_s *gb)
 {
     if (!get_flag_z) {
-        gb->cpu.regs.pc = mem_get_word(gb->cpu.regs.pc + 1);
+        gb->cpu.regs.pc = mem_read_word(gb, gb->cpu.regs.pc + 1);
         gb->cpu.cycles += 4;
     } else {
         gb->cpu.regs.pc += 3;
@@ -2778,7 +2778,7 @@ static inline void func_c9(struct gb_s *gb)
 static inline void func_ca(struct gb_s *gb)
 {
     if (get_flag_z) {
-        gb->cpu.regs.pc = mem_get_word(gb->cpu.regs.pc + 1);
+        gb->cpu.regs.pc = mem_read_word(gb, gb->cpu.regs.pc + 1);
         gb->cpu.cycles += 4;
     } else {
         gb->cpu.regs.pc += 3;
@@ -2902,7 +2902,16 @@ static inline void func_cb(struct gb_s *gb)
 /* call Z, u16 */
 static inline void func_cc(struct gb_s *gb)
 {
-    UNUSED(gb);
+    if (get_flag_z) {
+        gb->cpu.regs.sp -= 2;
+        mem_write_word(gb, gb->cpu.regs.sp, gb->cpu.regs.pc + 3);
+        gb->cpu.regs.pc = mem_read_word(gb, gb->cpu.regs.pc + 1);
+
+        gb->cpu.cycles += 6;
+    } else {
+        gb->cpu.regs.pc += 3;
+        gb->cpu.cycles += 3;
+    }
 }
 
 /* call u16 */
