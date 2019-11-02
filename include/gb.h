@@ -75,6 +75,9 @@ struct cpu_s {
     /* Interrupts should be enabled after next instruction */
     bool irq_next;
 
+    /* Pending interrupt */
+    uint8_t irq_pending;
+
     /* System is halted */
     bool halted;
 
