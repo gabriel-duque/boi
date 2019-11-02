@@ -1024,7 +1024,7 @@ static inline void func_28(struct gb_s *gb)
     if (get_flag_z) {
         /* TODO: check the +2 here is right skipping operands */
         gb->cpu.regs.pc += (int8_t) mem_read_byte(gb,
-                gb->mem[gb->cpu.regs.pc + 1]) + 2;
+                gb->mem.raw[gb->cpu.regs.pc + 1]) + 2;
         gb->cpu.cycles += 3;
     } else {
         gb->cpu.regs.pc += 2;
