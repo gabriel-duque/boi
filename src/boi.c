@@ -5,6 +5,7 @@
 #include "cpu.h"
 #include "gb.h"
 #include "gpu.h"
+#include "irq.h"
 #include "mem.h"
 #include "rom.h"
 
@@ -35,6 +36,7 @@ int main(int argc, char **argv)
     rom_load(&gb, filename);
     mem_init(&gb);
     cpu_init(&gb);
+    irq_init(&gb);
 
     /* Loop and execute instructions */
     while (cpu_cycle(&gb) && gpu_cycle(&gb))
