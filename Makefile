@@ -12,6 +12,7 @@ SRC = \
 	  src/clk.c \
 	  src/cpu.c \
 	  src/gpu.c \
+	  src/irq.c \
 	  src/mem.c \
 	  src/rom.c
 

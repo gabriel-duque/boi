@@ -69,15 +69,6 @@ struct cpu_s {
     /* Registers */
     struct regs_s regs;
 
-    /* Interrupts are enabled */
-    bool irq;
-
-    /* Interrupts should be enabled after next instruction */
-    bool irq_next;
-
-    /* Pending interrupt */
-    uint8_t irq_pending;
-
     /* System is halted */
     bool halted;
 
@@ -87,6 +78,35 @@ struct cpu_s {
 
 /*
  *****************************************************************************/
+
+/******************************************************************************
+ * Interrupt related types
+ */
+
+struct irq_s {
+
+    /* Interrupts are enabled */
+    bool enabled;
+
+    /* Pending interrupt */
+    uint8_t pending;
+
+    /* Interrupt flags */
+    bool vblank;
+    bool lcd;
+    bool clk;
+    bool serial;
+    bool joypad;
+
+    /* Interrupt masks */
+    bool vblank_msk;
+    bool lcd_msk;
+    bool clk_msk;
+    bool serial_msk;
+    bool joypad_msk;
+};
+
+/*****************************************************************************/
 
 /******************************************************************************
  * ROM related types
@@ -118,7 +138,7 @@ struct rom_s {
 /*****************************************************************************/
 
 /******************************************************************************
- * The actual GameBoy structure
+ * The memory structure
  */
 
 struct mem_s {
@@ -135,6 +155,7 @@ struct gb_s {
     struct cpu_s cpu;
     struct rom_s rom;
     struct mem_s mem;
+    struct irq_s irq;
 };
 
 /*****************************************************************************/

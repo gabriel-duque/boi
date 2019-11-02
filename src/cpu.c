@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "gb.h"
+#include "irq.h"
 #include "mem.h"
 #include "ops.h"
 
@@ -16,10 +17,6 @@ void cpu_init(struct gb_s *gb)
 
     gb->cpu.regs.sp = 0xfffe;
     gb->cpu.regs.pc = 0x100;
-
-    /* Enable interrupts and set an interrupt for next instruction */
-    gb->cpu.irq = true;
-    gb->cpu.irq_next = true;
 
     /* We start in non-halted mode */
     gb->cpu.halted = false;
@@ -3153,8 +3150,8 @@ static inline void func_d9(struct gb_s *gb)
     gb->cpu.regs.sp += 2;
     gb->cpu.cycles += 4;
 
-    gb->cpu.irq = true;
-    gb->cpu.irq_pending = 2;
+    gb->irq.enabled = true;
+    gb->irq.pending = 2;
 }
 
 /* jp C, mem16 */
@@ -3363,7 +3360,7 @@ static inline void func_f2(struct gb_s *gb)
 /* di */
 static inline void func_f3(struct gb_s *gb)
 {
-    gb->cpu.irq = false;
+    gb->irq.enabled = false;
 
     ++gb->cpu.regs.pc;
     ++gb->cpu.cycles;
@@ -3439,8 +3436,8 @@ static inline void func_fa(struct gb_s *gb)
 /* ei */
 static inline void func_fb(struct gb_s *gb)
 {
-    gb->cpu.irq = true;
-    gb->cpu.irq_pending = 2;
+    gb->irq.enabled = true;
+    gb->irq.pending = 2;
 
     ++gb->cpu.regs.pc;
     gb->cpu.cycles += 2;
@@ -3483,6 +3480,8 @@ bool cpu_cycle(struct gb_s *gb)
     }
 
     /* TODO: implement interrupt flushing */
+    if (irq_flush(gb))
+        gb->cpu.halted = false;
 
     /* Fetch opcode */
     op = mem_read_byte(gb, gb->cpu.regs.pc);
