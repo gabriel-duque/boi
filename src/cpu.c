@@ -45,7 +45,7 @@ static inline void func_rlc(struct gb_s *gb, uint8_t reg)
     uint8_t old;
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             old = gb->cpu.regs.b >> 7;
             gb->cpu.regs.b = gb->cpu.regs.b << 1 | old;
@@ -100,7 +100,7 @@ static inline void func_rrc(struct gb_s *gb, uint8_t reg)
     uint8_t old;
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             old = gb->cpu.regs.b & 0x1;
             gb->cpu.regs.b = gb->cpu.regs.b >> 1 | old << 7;
@@ -155,7 +155,7 @@ static inline void func_rl(struct gb_s *gb, uint8_t reg)
     uint8_t tmp;
     bool tmp_c = get_flag_c;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_c(gb->cpu.regs.b >> 7);
             gb->cpu.regs.b = gb->cpu.regs.b << 1 | tmp_c;
@@ -208,7 +208,7 @@ static inline void func_rr(struct gb_s *gb, uint8_t reg)
     uint8_t tmp;
     bool tmp_c = get_flag_c;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_c(gb->cpu.regs.b & 0x1);
             gb->cpu.regs.b = gb->cpu.regs.b >> 1 | tmp_c << 7;;
@@ -260,7 +260,7 @@ static inline void func_sla(struct gb_s *gb, uint8_t reg)
 {
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_c(gb->cpu.regs.b >> 7);
             gb->cpu.regs.b <<= 1;
@@ -314,7 +314,7 @@ static inline void func_sra(struct gb_s *gb, uint8_t reg)
     uint8_t old;
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_c(gb->cpu.regs.b & 0x01);
             old = gb->cpu.regs.b & 0x80;
@@ -375,7 +375,7 @@ static inline void func_swap(struct gb_s *gb, uint8_t reg)
 {
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             gb->cpu.regs.b = gb->cpu.regs.b << 4 | gb->cpu.regs.b >> 4;
             set_flag_z(!gb->cpu.regs.b);
@@ -421,7 +421,7 @@ static inline void func_srl(struct gb_s *gb, uint8_t reg)
 {
     uint8_t tmp;
 
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_c(gb->cpu.regs.b & 0x01);
             gb->cpu.regs.b >>= 1;
@@ -472,7 +472,7 @@ static inline void func_srl(struct gb_s *gb, uint8_t reg)
 
 static inline void func_bit(struct gb_s *gb, uint8_t reg, uint8_t mask)
 {
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             set_flag_z(!(gb->cpu.regs.b & mask));
             break;
@@ -506,7 +506,7 @@ static inline void func_bit(struct gb_s *gb, uint8_t reg, uint8_t mask)
 static inline void func_res(struct gb_s *gb, uint8_t reg, uint8_t mask)
 {
     uint8_t tmp;
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             gb->cpu.regs.b |= mask;
             break;
@@ -540,7 +540,7 @@ static inline void func_res(struct gb_s *gb, uint8_t reg, uint8_t mask)
 static inline void func_set(struct gb_s *gb, uint8_t reg, uint8_t mask)
 {
     uint8_t tmp;
-    switch(reg) {
+    switch (reg) {
         case 0x00: /* B */
             gb->cpu.regs.b |= mask;
             break;
